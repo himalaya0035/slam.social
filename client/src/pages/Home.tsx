@@ -35,7 +35,7 @@ const Home: React.FC = () => {
     <div className="home-container">
       <div className="container">
         <div className="glass-card fade-in">
-          <h1 className="text-center mb-lg">Truth Box</h1>
+          <h1 className="text-center">Truth Box</h1>
           <p className="text-center mb-lg">
             Get anonymous feedback from your friends. Create your Truth Box link and share it with others.
           </p>
@@ -91,7 +91,9 @@ const Home: React.FC = () => {
           </form>
           
           <div className="mt-lg text-center">
-            <p>No signup required. Just enter your name and get started!</p>
+            <p className="gradient-text" data-text="No signup required. Just enter your name and get started!">
+              No signup required. Just enter your name and get started!
+            </p>
           </div>
         </div>
       </div>

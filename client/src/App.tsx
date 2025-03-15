@@ -13,6 +13,9 @@ const App: React.FC = () => {
   return (
     <AppProvider>
       <Router>
+        {/* Floating background shape */}
+        <div className="floating-shape-1"></div>
+        
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/success" element={<Success />} />
