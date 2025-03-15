@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const { generateUniqueId, generateRandomPassword } = require('../utils/generators');
+const { generateUniqueId } = require('../utils/generators');
 const jwt = require('jsonwebtoken');
 
 /**
@@ -9,15 +9,18 @@ const jwt = require('jsonwebtoken');
  */
 const createUser = async (req, res) => {
   try {
-    const { name } = req.body;
+    const { name, password } = req.body;
 
     if (!name) {
       return res.status(400).json({ message: 'Name is required' });
     }
 
-    // Generate unique ID and password
+    if (!password || password.length < 4) {
+      return res.status(400).json({ message: 'Password must be at least 4 characters long' });
+    }
+
+    // Generate unique ID
     const uniqueId = generateUniqueId();
-    const password = generateRandomPassword();
 
     // Create new user
     const user = new User({

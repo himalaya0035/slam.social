@@ -8,7 +8,15 @@ import { User } from '../types';
 
 const Results: React.FC = () => {
   const { uniqueId } = useParams<{ uniqueId: string }>();
-  const { getUserProfile, getUserFeedback, loading, error, clearError, feedback, isAuthenticated } = useAppContext();
+  const { 
+    getUserProfile, 
+    verifyPasswordAndGetFeedback, 
+    loading, 
+    error, 
+    clearError, 
+    feedback, 
+    isAuthenticated 
+  } = useAppContext();
   const [user, setUser] = useState<User | null>(null);
   const [password, setPassword] = useState('');
   const [isAuthenticating, setIsAuthenticating] = useState(false);
@@ -28,29 +36,19 @@ const Results: React.FC = () => {
     fetchUser();
   }, [uniqueId, getUserProfile]);
 
-  useEffect(() => {
-    const fetchFeedback = async () => {
-      if (user && isAuthenticated) {
-        await getUserFeedback(user._id);
-      }
-    };
-
-    fetchFeedback();
-  }, [user, isAuthenticated, getUserFeedback]);
-
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsAuthenticating(true);
     
-    // In a real implementation, we would authenticate with the password here
-    // For now, we'll just simulate authentication
-    setTimeout(() => {
-      setIsAuthenticating(false);
-      // Fetch feedback after authentication
-      if (user) {
-        getUserFeedback(user._id);
+    if (uniqueId && password) {
+      try {
+        await verifyPasswordAndGetFeedback(uniqueId, password);
+      } catch (error) {
+        console.error('Authentication error:', error);
+      } finally {
+        setIsAuthenticating(false);
       }
-    }, 1000);
+    }
   };
 
   const handleShareResults = () => {

@@ -6,6 +6,8 @@ import ErrorMessage from '../components/ErrorMessage';
 
 const Home: React.FC = () => {
   const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const { createNewUser, loading, error, clearError } = useAppContext();
   const navigate = useNavigate();
 
@@ -15,13 +17,15 @@ const Home: React.FC = () => {
     if (!name.trim()) {
       return;
     }
+
+    if (password.length < 4) {
+      setPasswordError('Password must be at least 4 characters long');
+      return;
+    }
     
-    const userData = await createNewUser(name.trim());
+    const userData = await createNewUser(name.trim(), password);
     
     if (userData) {
-      // Show the password to the user
-      alert(`Your password to view results: ${userData.password}\nPlease save this password!`);
-      
       // Navigate to the success page
       navigate('/success');
     }
@@ -53,6 +57,28 @@ const Home: React.FC = () => {
                 disabled={loading}
                 required
               />
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="password" className="form-label">
+                Your Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                className="form-input"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setPasswordError('');
+                }}
+                placeholder="Choose a password (min. 4 characters)"
+                disabled={loading}
+                required
+                minLength={4}
+              />
+              {passwordError && <p className="text-error mt-sm">{passwordError}</p>}
+              <p className="text-sm mt-sm">You'll need this password to view your results later.</p>
             </div>
             
             <button

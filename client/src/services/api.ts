@@ -23,8 +23,8 @@ api.interceptors.request.use(
 );
 
 // User API
-export const createUser = async (name: string) => {
-  const response = await api.post('/users', { name });
+export const createUser = async (name: string, password: string) => {
+  const response = await api.post('/users', { name, password });
   return response.data;
 };
 
@@ -46,6 +46,11 @@ export const submitFeedback = async (uniqueId: string, ratings: any, comment: st
 
 export const getFeedback = async (userId: string) => {
   const response = await api.get(`/feedback/${userId}`);
+  return response.data;
+};
+
+export const verifyAndGetFeedback = async (uniqueId: string, password: string) => {
+  const response = await api.post('/feedback/verify', { uniqueId, password });
   return response.data;
 };
 

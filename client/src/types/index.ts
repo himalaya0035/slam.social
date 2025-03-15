@@ -51,11 +51,12 @@ export interface AppState {
 }
 
 export interface AppContextType extends AppState {
-  createNewUser: (name: string) => Promise<UserWithPassword | null>;
+  createNewUser: (name: string, password: string) => Promise<UserWithPassword | null>;
   authenticateWithPassword: (uniqueId: string, password: string) => Promise<boolean>;
   getUserProfile: (uniqueId: string) => Promise<User | null>;
   submitUserFeedback: (feedback: FeedbackSubmission) => Promise<boolean>;
   getUserFeedback: (userId: string) => Promise<FeedbackResponse | null>;
+  verifyPasswordAndGetFeedback: (uniqueId: string, password: string) => Promise<FeedbackResponse | null>;
   logout: () => void;
   clearError: () => void;
 } 

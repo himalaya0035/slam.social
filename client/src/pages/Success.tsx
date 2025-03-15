@@ -67,6 +67,9 @@ const Success: React.FC = () => {
             <p className="mb-md">
               Remember, you can only view your results after receiving at least 5 responses.
             </p>
+            <p className="mb-md important-note">
+              <strong>Important:</strong> You'll need your password to view your results. Make sure you remember it!
+            </p>
             <button
               className="btn btn-primary"
               onClick={handleViewResults}

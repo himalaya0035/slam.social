@@ -66,3 +66,17 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.important-note {
+  color: #e74c3c;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: rgba(231, 76, 60, 0.1);
+  margin: 10px 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .important-note {
+    background-color: rgba(231, 76, 60, 0.2);
+  }
+}

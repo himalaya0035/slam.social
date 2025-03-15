@@ -13,6 +13,7 @@ import {
   authenticateUser,
   submitFeedback,
   getFeedback,
+  verifyAndGetFeedback,
 } from '../services/api';
 
 // Initial state
@@ -155,10 +156,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, []);
 
   // Create a new user
-  const createNewUser = useCallback(async (name: string): Promise<UserWithPassword | null> => {
+  const createNewUser = useCallback(async (name: string, password: string): Promise<UserWithPassword | null> => {
     try {
       dispatch({ type: ActionType.SET_LOADING, payload: true });
-      const userData = await createUser(name);
+      const userData = await createUser(name, password);
       
       // Save to localStorage
       localStorage.setItem('token', userData.token);
@@ -235,6 +236,31 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   }, []);
 
+  // Verify password and get feedback
+  const verifyPasswordAndGetFeedback = useCallback(async (uniqueId: string, password: string): Promise<FeedbackResponse | null> => {
+    try {
+      dispatch({ type: ActionType.SET_LOADING, payload: true });
+      const feedbackData = await verifyAndGetFeedback(uniqueId, password);
+      dispatch({ type: ActionType.SET_FEEDBACK, payload: feedbackData });
+      dispatch({ type: ActionType.SET_LOADING, payload: false });
+      return feedbackData;
+    } catch (error: any) {
+      if (error.response?.status === 403) {
+        // Not enough feedback yet
+        dispatch({ 
+          type: ActionType.SET_ERROR, 
+          payload: `Not enough feedback yet. You have ${error.response.data.count} out of ${error.response.data.required} required responses.` 
+        });
+      } else if (error.response?.status === 401) {
+        dispatch({ type: ActionType.SET_ERROR, payload: 'Invalid password. Please try again.' });
+      } else {
+        dispatch({ type: ActionType.SET_ERROR, payload: error.response?.data?.message || 'Failed to get feedback' });
+      }
+      dispatch({ type: ActionType.SET_LOADING, payload: false });
+      return null;
+    }
+  }, []);
+
   // Logout
   const logout = useCallback(() => {
     localStorage.removeItem('token');
@@ -258,6 +284,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         getUserProfile,
         submitUserFeedback,
         getUserFeedback,
+        verifyPasswordAndGetFeedback,
         logout,
         clearError,
       }}
