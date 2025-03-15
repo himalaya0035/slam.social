@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, useCallback } from 'react';
 import {
   AppState,
   AppContextType,
@@ -141,8 +141,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   }, []);
 
+  // Get user profile
+  const getUserProfile = useCallback(async (uniqueId: string): Promise<User | null> => {
+    try {
+      dispatch({ type: ActionType.SET_LOADING, payload: true });
+      const userData = await getUserByUniqueId(uniqueId);
+      dispatch({ type: ActionType.SET_LOADING, payload: false });
+      return userData;
+    } catch (error: any) {
+      dispatch({ type: ActionType.SET_ERROR, payload: error.response?.data?.message || 'Failed to get user profile' });
+      return null;
+    }
+  }, []);
+
   // Create a new user
-  const createNewUser = async (name: string): Promise<UserWithPassword | null> => {
+  const createNewUser = useCallback(async (name: string): Promise<UserWithPassword | null> => {
     try {
       dispatch({ type: ActionType.SET_LOADING, payload: true });
       const userData = await createUser(name);
@@ -162,10 +175,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       dispatch({ type: ActionType.SET_ERROR, payload: error.response?.data?.message || 'Failed to create user' });
       return null;
     }
-  };
+  }, []);
 
   // Authenticate user with password
-  const authenticateWithPassword = async (uniqueId: string, password: string): Promise<boolean> => {
+  const authenticateWithPassword = useCallback(async (uniqueId: string, password: string): Promise<boolean> => {
     try {
       dispatch({ type: ActionType.SET_LOADING, payload: true });
       const userData = await authenticateUser(uniqueId, password);
@@ -185,23 +198,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       dispatch({ type: ActionType.SET_ERROR, payload: error.response?.data?.message || 'Authentication failed' });
       return false;
     }
-  };
-
-  // Get user profile
-  const getUserProfile = async (uniqueId: string): Promise<User | null> => {
-    try {
-      dispatch({ type: ActionType.SET_LOADING, payload: true });
-      const userData = await getUserByUniqueId(uniqueId);
-      dispatch({ type: ActionType.SET_LOADING, payload: false });
-      return userData;
-    } catch (error: any) {
-      dispatch({ type: ActionType.SET_ERROR, payload: error.response?.data?.message || 'Failed to get user profile' });
-      return null;
-    }
-  };
+  }, []);
 
   // Submit feedback
-  const submitUserFeedback = async (feedbackData: FeedbackSubmission): Promise<boolean> => {
+  const submitUserFeedback = useCallback(async (feedbackData: FeedbackSubmission): Promise<boolean> => {
     try {
       dispatch({ type: ActionType.SET_LOADING, payload: true });
       await submitFeedback(feedbackData.uniqueId, feedbackData.ratings, feedbackData.comment);
@@ -211,10 +211,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       dispatch({ type: ActionType.SET_ERROR, payload: error.response?.data?.message || 'Failed to submit feedback' });
       return false;
     }
-  };
+  }, []);
 
   // Get user feedback
-  const getUserFeedback = async (userId: string): Promise<FeedbackResponse | null> => {
+  const getUserFeedback = useCallback(async (userId: string): Promise<FeedbackResponse | null> => {
     try {
       dispatch({ type: ActionType.SET_LOADING, payload: true });
       const feedbackData = await getFeedback(userId);
@@ -233,21 +233,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
       return null;
     }
-  };
+  }, []);
 
   // Logout
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
     localStorage.removeItem('uniqueId');
     localStorage.removeItem('name');
     dispatch({ type: ActionType.LOGOUT });
-  };
+  }, []);
 
   // Clear error
-  const clearError = () => {
+  const clearError = useCallback(() => {
     dispatch({ type: ActionType.CLEAR_ERROR });
-  };
+  }, []);
 
   return (
     <AppContext.Provider

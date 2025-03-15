@@ -32,7 +32,9 @@ const Feedback: React.FC = () => {
     };
 
     fetchUser();
-  }, [uniqueId, getUserProfile]);
+    // Remove getUserProfile from the dependency array to prevent infinite loops
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [uniqueId]);
 
   const handleRatingChange = (name: string, value: number) => {
     setRatings((prev) => ({
