@@ -106,7 +106,7 @@ const Success: React.FC = () => {
           
           <div className="text-center mt-lg">
             <p>
-              Share your Truth Box link on social media to get more responses!
+              Share your Slam link on social media to get more responses!
             </p>
             <div className="social-share-buttons">
               <button onClick={() => handleShareOnSocial('instagram')}>

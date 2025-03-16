@@ -37,16 +37,16 @@ const ShareableCard: React.FC<ShareableCardProps> = ({
 
   return (
     <div className="shareable-card" ref={cardRef}>
-      <h2 className="gradient-text" data-text={`${name}'s Truth Box Results`}>
-        {name}'s Truth Box Results
+      <h2 className="gradient-text" data-text={`${name}'s Slam Results`}>
+        {name}'s Slam Results
       </h2>
       <div className="rating">
         <span className="rating-value">{(averageRatings.overall || 0).toFixed(1)}</span>
       </div>
       {topComment && <div className="quote">"{topComment}"</div>}
       <div className="cta">
-        <span className="gradient-text" data-text="Create your own Truth Box">
-          Create your own Truth Box at truthbox.app
+        <span className="gradient-text" data-text="Create your own Slam">
+          Create your own Slam at truthbox.app
         </span>
       </div>
       <div className="social-share-buttons mt-md">

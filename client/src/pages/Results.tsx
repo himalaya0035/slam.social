@@ -102,11 +102,11 @@ const Results: React.FC = () => {
           <div className="glass-card">
             <h1 className="text-center mb-lg">User Not Found</h1>
             <p className="text-center">
-              The Truth Box you're looking for doesn't exist. Please check the URL and try again.
+              The Slam you're looking for doesn't exist. Please check the URL and try again.
             </p>
             <div className="text-center mt-lg">
               <button className="btn btn-primary" onClick={() => navigate('/')}>
-                Create Your Own Truth Box
+                Create Your Own Slam
               </button>
             </div>
           </div>
@@ -124,13 +124,13 @@ const Results: React.FC = () => {
             <h1 className="text-center mb-lg">Results Locked</h1>
             <ErrorMessage message={error} onClose={clearError} />
             <p className="text-center mb-lg">
-              Share your Truth Box link with more friends to get feedback!
+              Share your Slam link with more friends to get feedback!
             </p>
             <button
               className="btn btn-primary"
               onClick={() => navigate(`/success`)}
             >
-              Share My Truth Box
+              Share My Slam
             </button>
           </div>
         </div>
@@ -310,7 +310,7 @@ const Results: React.FC = () => {
           
           <div className="text-center mt-lg">
             <p>
-              Don't have a Truth Box yet?{' '}
+              Don't have a Slam yet?{' '}
               <a href="/" className="text-primary">
                 Create one now
               </a>
