@@ -7,6 +7,7 @@ import Feedback from './pages/Feedback';
 import Results from './pages/Results';
 import Auth from './pages/Auth';
 import NotFound from './pages/NotFound';
+import SliderPage from './pages/SliderPage';
 import './styles/index.css';
 
 const App: React.FC = () => {
@@ -22,6 +23,7 @@ const App: React.FC = () => {
           <Route path="/feedback/:uniqueId" element={<Feedback />} />
           <Route path="/results/:uniqueId" element={<Results />} />
           <Route path="/auth/:uniqueId" element={<Auth />} />
+          <Route path="/slider" element={<SliderPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
