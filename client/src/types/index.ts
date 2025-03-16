@@ -21,11 +21,12 @@ export interface AuthResponse {
 
 // Feedback types
 export interface Ratings {
-  reliability: number;
-  trustworthiness: number;
-  honesty: number;
-  intelligence: number;
-  funFactor: number;
+  reliability: number | null;
+  trustworthiness: number | null;
+  honesty: number | null;
+  intelligence: number | null;
+  funFactor: number | null;
+  loyalty: number | null;
   overall?: number;
 }
 

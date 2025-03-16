@@ -33,7 +33,7 @@ const Auth: React.FC = () => {
           {error && <ErrorMessage message={error} onClose={clearError} />}
           
           <p className="text-center mb-lg">
-            Please enter your password to view your Truth Box results.
+            Please enter your password to view your Slam results.
           </p>
           
           <form onSubmit={handleSubmit}>
@@ -64,7 +64,7 @@ const Auth: React.FC = () => {
           
           <div className="text-center mt-lg">
             <p>
-              Don't have a Truth Box yet?{' '}
+              Don't have a Slam yet?{' '}
               <a href="/" className="text-primary">
                 Create one now
               </a>

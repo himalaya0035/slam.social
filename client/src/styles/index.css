@@ -247,12 +247,14 @@ h1 {
 }
 
 .btn-secondary {
-  background: var(--secondary-gradient);
-  color: white;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-light);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .btn-secondary:hover {
-  box-shadow: 0px 0px 15px rgba(255, 215, 0, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
   transform: translateY(-2px);
 }
 
@@ -344,12 +346,22 @@ h1 {
 /* Rating Bars */
 .rating-bar-container {
   width: 100%;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin: var(--spacing-sm) 0 var(--spacing-md) 0;
+  position: relative;
+  padding: var(--spacing-xs) 0;
+}
+
+.rating-bar-wrapper {
+  width: 100%;
   height: 12px;
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-full);
   overflow: hidden;
-  margin: var(--spacing-sm) 0;
   position: relative;
+  margin-top: var(--spacing-xs);
 }
 
 .rating-bar {
@@ -375,12 +387,135 @@ h1 {
   animation: shimmer 2s infinite;
 }
 
+.rating-marker {
+  position: absolute;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  background-color: var(--accent-color);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 8px rgba(248, 177, 149, 0.7);
+  z-index: 2;
+}
+
+.rating-scale {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.rating-scale span {
+  position: relative;
+  text-align: center;
+  width: 14.28%; /* 100% / 7 points on the scale */
+}
+
+.rating-scale span::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 5px;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.rating-item {
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background-color: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.rating-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  transform: translateY(-2px);
+}
+
+.rating-item.overall {
+  background-color: rgba(248, 177, 149, 0.1);
+  border: 1px solid rgba(248, 177, 149, 0.2);
+}
+
+.rating-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xs);
+}
+
+.rating-value {
+  font-weight: 600;
+  font-size: var(--text-xl);
+  color: var(--accent-color);
+  text-shadow: 0 0 5px rgba(248, 177, 149, 0.5);
+}
+
+.rating-text {
+  font-weight: 500;
+  color: var(--text-light);
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.rating-question h3 {
+  font-size: var(--text-lg);
+  margin-bottom: var(--spacing-xs);
+  color: var(--text-light);
+}
+
+.rating-description {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-bottom: var(--spacing-sm);
+  opacity: 0.8;
+}
+
 @keyframes shimmer {
   0% {
     transform: translateX(-100%);
   }
   100% {
     transform: translateX(100%);
+  }
+}
+
+/* Media queries for responsive rating bars */
+@media (max-width: 768px) {
+  .rating-scale {
+    font-size: 9px;
+  }
+  
+  .rating-item {
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .rating-question h3 {
+    font-size: var(--text-md);
+  }
+  
+  .rating-description {
+    font-size: var(--text-xs);
+  }
+  
+  .rating-value {
+    font-size: var(--text-lg);
+  }
+  
+  .rating-marker {
+    width: 12px;
+    height: 12px;
   }
 }
 
@@ -415,24 +550,6 @@ h1 {
 .error-close:hover {
   opacity: 1;
   transform: scale(1.1);
-}
-
-/* Rating Item */
-.rating-item {
-  margin-bottom: var(--spacing-md);
-}
-
-.rating-label {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: var(--spacing-xs);
-  font-weight: 500;
-}
-
-.rating-value {
-  font-weight: 600;
-  color: var(--accent-color);
-  text-shadow: 0 0 5px rgba(248, 177, 149, 0.5);
 }
 
 /* Share Link Container */
@@ -660,10 +777,23 @@ h1 {
 }
 
 .shareable-card .rating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  margin: var(--spacing-md) 0;
+}
+
+.shareable-card .rating-value {
   font-size: var(--text-4xl);
   font-weight: 700;
   color: var(--accent-color);
   text-shadow: 0 0 10px rgba(248, 177, 149, 0.5);
+}
+
+.shareable-card .rating-emoji {
+  font-size: var(--text-3xl);
+  margin-left: var(--spacing-xs);
 }
 
 .shareable-card .quote {
@@ -676,6 +806,9 @@ h1 {
 
 .shareable-card .cta {
   margin-top: var(--spacing-lg);
+  text-align: center;
+  font-size: var(--text-sm);
+  opacity: 0.8;
 }
 
 /* Loading Spinner */
@@ -771,4 +904,59 @@ h1 {
 
 .gradient-text:hover::after {
   opacity: 1;
+}
+
+/* Question Progress Bar */
+.question-progress {
+  margin-bottom: var(--spacing-lg);
+  position: relative;
+  z-index: 1;
+}
+
+.question-progress-bar {
+  width: 100%;
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: var(--spacing-xs);
+}
+
+.question-progress-fill {
+  height: 100%;
+  background: var(--primary-gradient);
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+.question-progress-text {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+/* Spacing utility */
+.ml-md {
+  margin-left: var(--spacing-md);
+}
+
+.response-display {
+  background: rgba(248, 177, 149, 0.05);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm);
+  margin: var(--spacing-sm) 0 var(--spacing-md) 0;
+  text-align: center;
+  border: 1px solid rgba(248, 177, 149, 0.15);
+  transition: all 0.3s ease;
+}
+
+.response-value {
+  font-weight: 600;
+  font-size: var(--text-md);
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+  padding: 0 var(--spacing-sm);
 } 

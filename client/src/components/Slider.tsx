@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/Slider.css';
 
 interface SliderProps {
@@ -16,6 +16,11 @@ const Slider: React.FC<SliderProps> = ({
 }) => {
   const [value, setValue] = useState<number>(defaultValue);
   const [isActive, setIsActive] = useState<boolean>(false);
+
+  // Update internal state when defaultValue changes
+  useEffect(() => {
+    setValue(defaultValue);
+  }, [defaultValue]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = parseInt(e.target.value, 10);
@@ -72,14 +77,15 @@ const Slider: React.FC<SliderProps> = ({
             onTouchEnd={() => setIsActive(false)}
             onBlur={() => setIsActive(false)}
           />
-          {isActive && (
-            <div 
-              className="slider-value-indicator" 
-              style={{ left: getValuePosition() }}
-            >
-              {getTextLabel(value)}
-            </div>
-          )}
+          <div 
+            className="slider-value-indicator" 
+            style={{ 
+              left: getValuePosition(),
+              opacity: isActive ? 1 : 0.8
+            }}
+          >
+            {getTextLabel(value)}
+          </div>
         </div>
       </div>
     </div>

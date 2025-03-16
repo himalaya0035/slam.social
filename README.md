@@ -1,10 +1,10 @@
-# Truth Box - Anonymous Feedback Web App
+# Slam - Anonymous Feedback Web App
 
-Truth Box is an anonymous feedback platform where users receive ratings and short feedback from friends without requiring signup.
+Slam is an anonymous feedback platform where users receive ratings and short feedback from friends without requiring signup.
 
 ## Features
 
-- **No Signup Required**: Users simply enter their name and generate a unique Truth Box link.
+- **No Signup Required**: Users simply enter their name and generate a unique Slam link.
 - **Rating System**: Anonymous 5-star ratings across multiple categories (Reliability, Trustworthiness, Honesty, Intelligence, Fun Factor).
 - **Anonymous Short Feedback**: Short anonymous comments (max 50 characters).
 - **Anti-Trolling Mechanism**: Results are only viewable after receiving at least 5 responses.
@@ -30,8 +30,8 @@ Truth Box is an anonymous feedback platform where users receive ratings and shor
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/truthbox.git
-   cd truthbox
+   git clone https://github.com/yourusername/slam.git
+   cd slam
    ```
 
 2. Install dependencies:
@@ -49,7 +49,7 @@ Truth Box is an anonymous feedback platform where users receive ratings and shor
    - Create a `.env` file in the server directory with the following variables:
      ```
      PORT=5000
-     MONGODB_URI=mongodb://localhost:27017/truthbox
+     MONGODB_URI=mongodb://localhost:27017/slam
      JWT_SECRET=your_jwt_secret_key_here
      NODE_ENV=development
      ```
@@ -70,7 +70,7 @@ Truth Box is an anonymous feedback platform where users receive ratings and shor
 ## Project Structure
 
 ```
-truthbox/
+slam/
 ├── client/                 # Frontend React application
 │   ├── public/             # Public assets
 │   └── src/                # Source files

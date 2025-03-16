@@ -35,9 +35,9 @@ const Home: React.FC = () => {
     <div className="home-container">
       <div className="container">
         <div className="glass-card fade-in">
-          <h1 className="text-center">Truth Box</h1>
+          <h1 className="text-center">Slam</h1>
           <p className="text-center mb-lg">
-            Get anonymous feedback from your friends. Create your Truth Box link and share it with others.
+            Get anonymous feedback from your friends. Create your Slam link and share it with others.
           </p>
           
           {error && <ErrorMessage message={error} onClose={clearError} />}
@@ -86,7 +86,7 @@ const Home: React.FC = () => {
               className="btn btn-primary btn-lg w-full"
               disabled={loading}
             >
-              {loading ? <LoadingSpinner size="small" /> : 'Create Your Truth Box'}
+              {loading ? <LoadingSpinner size="small" /> : 'Create Your Slam'}
             </button>
           </form>
           

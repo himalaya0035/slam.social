@@ -20,7 +20,7 @@ const ShareableCard: React.FC<ShareableCardProps> = ({
         {name}'s Truth Box Results
       </h2>
       <div className="rating">
-        {averageRatings.overall?.toFixed(1) || '0.0'}/5.0
+        <span className="rating-value">{(averageRatings.overall || 0).toFixed(1)}</span>
       </div>
       {topComment && <div className="quote">"{topComment}"</div>}
       <div className="cta">

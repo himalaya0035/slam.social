@@ -14,11 +14,10 @@ const submitFeedback = async (req, res) => {
     if (!uniqueId || !ratings || !comment) {
       return res.status(400).json({ message: 'All fields are required' });
     }
-
     // Validate ratings
-    const ratingCategories = ['reliability', 'trustworthiness', 'honesty', 'intelligence', 'funFactor'];
+    const ratingCategories = ['reliability', 'intelligence', 'funFactor', 'trustworthiness', 'loyalty', 'honesty'];
     for (const category of ratingCategories) {
-      if (!ratings[category] || ratings[category] < 1 || ratings[category] > 5) {
+      if (ratings[category] === undefined || ratings[category] < -3 || ratings[category] > 3) {
         return res.status(400).json({ message: `Invalid rating for ${category}` });
       }
     }
@@ -80,12 +79,12 @@ const verifyAndGetFeedback = async (req, res) => {
     // Count total feedback for the user
     const feedbackCount = await Feedback.countDocuments({ userId: user._id });
 
-    // Check if there are at least 5 feedback entries
-    if (feedbackCount < 5) {
+    // Check if there are at least 3 feedback entries
+    if (feedbackCount < 3) {
       return res.status(403).json({
         message: 'Not enough feedback',
         count: feedbackCount,
-        required: 5,
+        required: 3,
       });
     }
 
@@ -95,19 +94,21 @@ const verifyAndGetFeedback = async (req, res) => {
     // Calculate average ratings
     const averageRatings = {
       reliability: 0,
-      trustworthiness: 0,
-      honesty: 0,
       intelligence: 0,
       funFactor: 0,
+      trustworthiness: 0,
+      loyalty: 0,
+      honesty: 0,
       overall: 0,
     };
 
     feedback.forEach((item) => {
       averageRatings.reliability += item.ratings.reliability;
-      averageRatings.trustworthiness += item.ratings.trustworthiness;
-      averageRatings.honesty += item.ratings.honesty;
       averageRatings.intelligence += item.ratings.intelligence;
       averageRatings.funFactor += item.ratings.funFactor;
+      averageRatings.trustworthiness += item.ratings.trustworthiness;
+      averageRatings.honesty += item.ratings.honesty;
+      averageRatings.loyalty += item.ratings.loyalty || 0;
     });
 
     // Calculate averages
@@ -123,11 +124,12 @@ const verifyAndGetFeedback = async (req, res) => {
     averageRatings.overall = parseFloat(
       (
         (averageRatings.reliability +
-          averageRatings.trustworthiness +
-          averageRatings.honesty +
           averageRatings.intelligence +
-          averageRatings.funFactor) /
-        5
+          averageRatings.funFactor +
+          averageRatings.trustworthiness +
+          averageRatings.loyalty +
+          averageRatings.honesty) /
+        6
       ).toFixed(1)
     );
 
@@ -175,19 +177,40 @@ const getFeedback = async (req, res) => {
     // Calculate average ratings
     const averageRatings = {
       reliability: 0,
-      trustworthiness: 0,
-      honesty: 0,
       intelligence: 0,
       funFactor: 0,
+      trustworthiness: 0,
+      loyalty: 0,
+      honesty: 0,
       overall: 0,
     };
 
     feedback.forEach((item) => {
-      averageRatings.reliability += item.ratings.reliability;
-      averageRatings.trustworthiness += item.ratings.trustworthiness;
-      averageRatings.honesty += item.ratings.honesty;
-      averageRatings.intelligence += item.ratings.intelligence;
-      averageRatings.funFactor += item.ratings.funFactor;
+      // Handle both old (1-5) and new (-3 to 3) rating scales
+      const isOldScale = item.ratings.reliability > 3; // If rating > 3, it's from the old 1-5 scale
+      
+      if (isOldScale) {
+        // Convert old scale (1-5) to new scale (-3 to 3)
+        averageRatings.reliability += convertOldToNewScale(item.ratings.reliability);
+        averageRatings.intelligence += convertOldToNewScale(item.ratings.intelligence);
+        averageRatings.funFactor += convertOldToNewScale(item.ratings.funFactor);
+        averageRatings.trustworthiness += convertOldToNewScale(item.ratings.trustworthiness);
+        averageRatings.honesty += convertOldToNewScale(item.ratings.honesty);
+        if (item.ratings.loyalty) {
+          averageRatings.loyalty += convertOldToNewScale(item.ratings.loyalty);
+        } else {
+          // If loyalty doesn't exist in old data, use a neutral value
+          averageRatings.loyalty += 0;
+        }
+      } else {
+        // New scale (-3 to 3)
+        averageRatings.reliability += item.ratings.reliability;
+        averageRatings.intelligence += item.ratings.intelligence;
+        averageRatings.funFactor += item.ratings.funFactor;
+        averageRatings.trustworthiness += item.ratings.trustworthiness;
+        averageRatings.honesty += item.ratings.honesty;
+        averageRatings.loyalty += item.ratings.loyalty || 0;
+      }
     });
 
     // Calculate averages
@@ -203,11 +226,12 @@ const getFeedback = async (req, res) => {
     averageRatings.overall = parseFloat(
       (
         (averageRatings.reliability +
-          averageRatings.trustworthiness +
-          averageRatings.honesty +
           averageRatings.intelligence +
-          averageRatings.funFactor) /
-        5
+          averageRatings.funFactor +
+          averageRatings.trustworthiness +
+          averageRatings.loyalty +
+          averageRatings.honesty) /
+        6
       ).toFixed(1)
     );
 

@@ -38,7 +38,7 @@ const Success: React.FC = () => {
     <div className="home-container">
       <div className="container">
         <div className="glass-card fade-in">
-          <h1 className="text-center mb-lg">Your Truth Box is Ready!</h1>
+          <h1 className="text-center mb-lg">Your Slam is Ready!</h1>
           
           {error && <ErrorMessage message={error} onClose={clearError} />}
           
@@ -80,7 +80,7 @@ const Success: React.FC = () => {
           
           <div className="text-center mt-lg">
             <p>
-              Share your Truth Box link on social media to get more responses!
+              Share your Slam link on social media to get more responses!
             </p>
             <div className="social-share-buttons mt-md">
               {/* Social share buttons would go here */}

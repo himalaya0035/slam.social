@@ -19,7 +19,7 @@ app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/truthbox';
+const MONGODB_URI = process.env.MONGODB_URI;
 mongoose.connect(MONGODB_URI)
   .then(() => {
     console.log('Connected to MongoDB');
@@ -34,7 +34,7 @@ app.use('/api/feedback', feedbackRoutes);
 
 // Default route
 app.get('/', (req, res) => {
-  res.send('Truth Box API is running');
+  res.send('Slam API is running');
 });
 
 // Start server

@@ -5,6 +5,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
 import ShareableCard from '../components/ShareableCard';
 import { User } from '../types';
+import { questions } from '../constants/questions';
 
 const Results: React.FC = () => {
   const { uniqueId } = useParams<{ uniqueId: string }>();
@@ -14,14 +15,35 @@ const Results: React.FC = () => {
     loading, 
     error, 
     clearError, 
-    feedback, 
-    isAuthenticated 
+    feedback,
   } = useAppContext();
   const [user, setUser] = useState<User | null>(null);
   const [password, setPassword] = useState('');
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [showShareable, setShowShareable] = useState(false);
   const navigate = useNavigate();
+
+  // Helper function to get text label based on value
+  const getTextLabel = (value: number): string => {
+    switch (Math.round(value)) {
+      case -3:
+        return "Absolutely not!";
+      case -2:
+        return "No way";
+      case -1:
+        return "Not really";
+      case 0:
+        return "Neutral";
+      case 1:
+        return "Yes, kinda";
+      case 2:
+        return "For sure!";
+      case 3:
+        return "Absolutely!";
+      default:
+        return value.toString();
+    }
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -53,6 +75,12 @@ const Results: React.FC = () => {
 
   const handleShareResults = () => {
     setShowShareable(true);
+  };
+
+  // Calculate the width percentage for the rating bar based on -3 to 3 scale
+  const calculateBarWidth = (value: number) => {
+    // Convert from -3 to 3 scale to 0-100%
+    return ((value + 3) / 6) * 100;
   };
 
   if (loading && !user) {
@@ -140,7 +168,7 @@ const Results: React.FC = () => {
           ) : (
             <div className="glass-card fade-in">
               <h1 className="text-center mb-md">{user?.name}'s Results</h1>
-              <p className="text-center mb-lg">
+              <p className="mb-lg">
                 Based on {feedback.count} anonymous responses
               </p>
 
@@ -149,81 +177,70 @@ const Results: React.FC = () => {
               <div className="ratings-results mb-lg">
                 <h2 className="mb-md">Average Ratings</h2>
                 
-                <div className="rating-item">
-                  <div className="rating-label">
-                    <span>Reliability</span>
-                    <span className="rating-value">{feedback.averageRatings.reliability.toFixed(1)}</span>
-                  </div>
-                  <div className="rating-bar-container">
-                    <div
-                      className="rating-bar"
-                      style={{ width: `${(feedback.averageRatings.reliability / 5) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
+                {questions.map((q) => {
+                  const ratingKey = q.id as keyof typeof feedback.averageRatings;
+                  const ratingValue = feedback.averageRatings[ratingKey] || 0;
+                  
+                  return (
+                    <div className="rating-item" key={q.id}>
+                      <div className="rating-question">
+                        <h3>{q.question}</h3>
+                        <p className="rating-description">{q.description}</p>
+                      </div>
+                      <div className="rating-label">
+                        <span className="rating-value">{ratingValue.toFixed(1)}</span>
+                        <span className="rating-text">{getTextLabel(ratingValue)}</span>
+                      </div>
+                      <div className="rating-bar-container">
+                        <div className="rating-scale">
+                          <span>-3</span>
+                          <span>-2</span>
+                          <span>-1</span>
+                          <span>0</span>
+                          <span>1</span>
+                          <span>2</span>
+                          <span>3</span>
+                        </div>
+                        <div className="rating-bar-wrapper">
+                          <div
+                            className="rating-bar"
+                            style={{ width: `${calculateBarWidth(ratingValue)}%` }}
+                          ></div>
+                          <div 
+                            className="rating-marker"
+                            style={{ left: `${calculateBarWidth(ratingValue)}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
                 
-                <div className="rating-item">
-                  <div className="rating-label">
-                    <span>Trustworthiness</span>
-                    <span className="rating-value">{feedback.averageRatings.trustworthiness.toFixed(1)}</span>
-                  </div>
-                  <div className="rating-bar-container">
-                    <div
-                      className="rating-bar"
-                      style={{ width: `${(feedback.averageRatings.trustworthiness / 5) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
-                
-                <div className="rating-item">
-                  <div className="rating-label">
-                    <span>Honesty</span>
-                    <span className="rating-value">{feedback.averageRatings.honesty.toFixed(1)}</span>
-                  </div>
-                  <div className="rating-bar-container">
-                    <div
-                      className="rating-bar"
-                      style={{ width: `${(feedback.averageRatings.honesty / 5) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
-                
-                <div className="rating-item">
-                  <div className="rating-label">
-                    <span>Intelligence</span>
-                    <span className="rating-value">{feedback.averageRatings.intelligence.toFixed(1)}</span>
-                  </div>
-                  <div className="rating-bar-container">
-                    <div
-                      className="rating-bar"
-                      style={{ width: `${(feedback.averageRatings.intelligence / 5) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
-                
-                <div className="rating-item">
-                  <div className="rating-label">
-                    <span>Fun Factor</span>
-                    <span className="rating-value">{feedback.averageRatings.funFactor.toFixed(1)}</span>
-                  </div>
-                  <div className="rating-bar-container">
-                    <div
-                      className="rating-bar"
-                      style={{ width: `${(feedback.averageRatings.funFactor / 5) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
-                
-                <div className="rating-item">
+                <div className="rating-item overall">
                   <div className="rating-label">
                     <span>Overall</span>
-                    <span className="rating-value">{feedback.averageRatings.overall?.toFixed(1)}</span>
+                    <span className="rating-value">{(feedback.averageRatings.overall || 0).toFixed(1)}</span>
                   </div>
                   <div className="rating-bar-container">
-                    <div
-                      className="rating-bar"
-                      style={{ width: `${((feedback.averageRatings.overall || 0) / 5) * 100}%` }}
-                    ></div>
+                    <div className="rating-scale">
+                      <span>-3</span>
+                      <span>-2</span>
+                      <span>-1</span>
+                      <span>0</span>
+                      <span>1</span>
+                      <span>2</span>
+                      <span>3</span>
+                    </div>
+                    <div className="rating-bar-wrapper">
+                      <div
+                        className="rating-bar"
+                        style={{ width: `${calculateBarWidth(feedback.averageRatings.overall || 0)}%` }}
+                      ></div>
+                      <div 
+                        className="rating-marker"
+                        style={{ left: `${calculateBarWidth(feedback.averageRatings.overall || 0)}%` }}
+                      ></div>
+                    </div>
                   </div>
                 </div>
               </div>
