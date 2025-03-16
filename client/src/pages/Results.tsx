@@ -278,7 +278,7 @@ const Results: React.FC = () => {
           
           {error && <ErrorMessage message={error} onClose={clearError} />}
           
-          <p className="text-center mb-lg">
+          <p className="mb-lg">
             Please enter your password to view your results.
           </p>
           

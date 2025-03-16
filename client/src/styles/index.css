@@ -581,11 +581,23 @@ h1 {
   transition: all 0.3s ease;
   color: white;
   font-size: 1.2rem;
+  padding: 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.social-share-buttons button svg {
+  width: 20px;
+  height: 20px;
+  fill: white;
 }
 
 .social-share-buttons button:hover {
   transform: translateY(-3px) scale(1.1);
   box-shadow: 0 5px 15px rgba(248, 177, 149, 0.3);
+}
+
+.social-share-buttons button:active {
+  transform: scale(0.95);
 }
 
 .ml-sm {
