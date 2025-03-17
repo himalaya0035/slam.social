@@ -12,12 +12,12 @@ const Feedback: React.FC = () => {
   const { getUserProfile, submitUserFeedback, loading, error, clearError } = useAppContext();
   const [user, setUser] = useState<User | null>(null);
   const [ratings, setRatings] = useState<Ratings>({
-    reliability: null,
-    trustworthiness: null,
-    honesty: null,
-    intelligence: null,
-    funFactor: null,
-    loyalty: null
+    reliability: 0,
+    trustworthiness: 0,
+    honesty: 0,
+    intelligence: 0,
+    funFactor: 0,
+    loyalty: 0
   });
   const [sliderValues, setSliderValues] = useState<Record<string, number>>({});
   const [comment, setComment] = useState('');
@@ -59,13 +59,6 @@ const Feedback: React.FC = () => {
     e.preventDefault();
 
     if (!uniqueId) return;
-
-    // Check if all ratings are provided
-    const allRatingsProvided = Object.values(ratings).every((rating) => rating !== null);
-    if (!allRatingsProvided) {
-      alert('Please provide ratings for all categories.');
-      return;
-    }
 
     // Check if comment is provided
     if (!comment.trim()) {
