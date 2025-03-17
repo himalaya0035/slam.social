@@ -5,6 +5,7 @@ import '../styles/Question.css';
 interface QuestionProps {
   question: string;
   description?: string;
+  options?: Record<string, string>;
   onChange?: (value: number) => void;
   defaultValue?: number;
 }
@@ -12,6 +13,7 @@ interface QuestionProps {
 const Question: React.FC<QuestionProps> = ({
   question,
   description,
+  options,
   onChange,
   defaultValue = 0
 }) => {
@@ -34,7 +36,8 @@ const Question: React.FC<QuestionProps> = ({
           min={-3} 
           max={3} 
           defaultValue={defaultValue} 
-          onChange={handleSliderChange} 
+          onChange={handleSliderChange}
+          options={options} 
         />
       </div>
     </div>

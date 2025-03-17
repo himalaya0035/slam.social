@@ -23,6 +23,23 @@
   padding-bottom: 15px;
 }
 
+.slider-min-label, .slider-max-label {
+  position: absolute;
+  bottom: 0;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.slider-min-label {
+  left: 0;
+  color: #f67280;
+}
+
+.slider-max-label {
+  right: 0;
+  color: #355c7d;
+}
+
 .slider-value-indicator {
   position: absolute;
   top: -10px;
@@ -198,27 +215,6 @@
   cursor: grabbing;
 }
 
-/* Add min/max labels */
-.slider-track-container::before,
-.slider-track-container::after {
-  position: absolute;
-  bottom: 0;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.slider-track-container::before {
-  content: "Absolutely not! 🚫";
-  left: 0;
-  color: #f67280;
-}
-
-.slider-track-container::after {
-  content: "Absolutely! 🎯";
-  right: 0;
-  color: #355c7d;
-}
-
 /* Media queries for responsiveness */
 @media screen and (max-width: 768px) {
   .slider-container {
@@ -232,6 +228,10 @@
   .slider-track-container {
     padding-top: 40px;
     padding-bottom: 12px;
+  }
+  
+  .slider-min-label, .slider-max-label {
+    font-size: 10px;
   }
 }
 
@@ -263,6 +263,13 @@
   .slider-input::-ms-thumb {
     height: 20px;
     width: 20px;
+  }
+  
+  .slider-min-label, .slider-max-label {
+    font-size: 9px;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   
   .slider-track-container::before,

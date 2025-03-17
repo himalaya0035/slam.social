@@ -6,13 +6,15 @@ interface SliderProps {
   max?: number;
   defaultValue?: number;
   onChange?: (value: number) => void;
+  options?: Record<string, string>;
 }
 
 const Slider: React.FC<SliderProps> = ({
   min = -3,
   max = 3,
   defaultValue = 0,
-  onChange
+  onChange,
+  options
 }) => {
   const [value, setValue] = useState<number>(defaultValue);
   const [isActive, setIsActive] = useState<boolean>(false);
@@ -39,6 +41,12 @@ const Slider: React.FC<SliderProps> = ({
 
   // Get text label based on value
   const getTextLabel = (value: number): string => {
+    // If options are provided, use them
+    if (options && options[value.toString()]) {
+      return options[value.toString()];
+    }
+    
+    // Fall back to default labels if no options provided
     switch (value) {
       case -3:
         return "Absolutely not! 🚫";
@@ -59,6 +67,9 @@ const Slider: React.FC<SliderProps> = ({
     }
   };
   
+  // Get min and max labels
+  const minLabel = options?.[min.toString()] || "Absolutely not! 🚫";
+  const maxLabel = options?.[max.toString()] || "Absolutely! 🎯";
 
   return (
     <div className="slider-container">
@@ -86,6 +97,9 @@ const Slider: React.FC<SliderProps> = ({
           >
             {getTextLabel(value)}
           </div>
+          
+          <div className="slider-min-label">{minLabel}</div>
+          <div className="slider-max-label">{maxLabel}</div>
         </div>
       </div>
     </div>

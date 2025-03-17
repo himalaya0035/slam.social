@@ -465,6 +465,8 @@ h1 {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  display: flex;
+  align-items: center;
 }
 
 .rating-question h3 {

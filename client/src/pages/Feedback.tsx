@@ -182,6 +182,7 @@ const Feedback: React.FC = () => {
               <Question 
                 question={currentQuestion.question}
                 description={currentQuestion.description}
+                options={currentQuestion.options}
                 onChange={(value) => handleSliderChange(currentQuestion.id, value)}
                 defaultValue={currentSliderValue}
               />

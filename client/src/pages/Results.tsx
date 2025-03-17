@@ -24,7 +24,13 @@ const Results: React.FC = () => {
   const navigate = useNavigate();
 
   // Helper function to get text label based on value
-  const getTextLabel = (value: number): string => {
+  const getTextLabel = (value: number, options?: Record<string, string>): string => {
+    // If options are provided, use them
+    if (options && options[Math.round(value).toString()]) {
+      return options[Math.round(value).toString()];
+    }
+    
+    // Fall back to default labels
     switch (Math.round(value)) {
       case -3:
         return "Absolutely not!";
@@ -189,7 +195,7 @@ const Results: React.FC = () => {
                       </div>
                       <div className="rating-label">
                         <span className="rating-value">{ratingValue.toFixed(1)}</span>
-                        <span className="rating-text">{getTextLabel(ratingValue)}</span>
+                        <span className="rating-text">{getTextLabel(ratingValue, q.options)}</span>
                       </div>
                       <div className="rating-bar-container">
                         <div className="rating-scale">
