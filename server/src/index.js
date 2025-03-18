@@ -40,7 +40,8 @@ app.use('/api/feedback', feedbackRoutes);
 
 // Default route
 app.get('/', (req, res) => {
-  res.send('Slam API is running');
+  const data = {allowedOrigins, a: process.env.NODE_ENV, b: process.env.CORS_URL_1}
+  res.send({msg: 'Slam API is running',data});
 });
 
 // Start server

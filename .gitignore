@@ -16,6 +16,7 @@ yarn-error.log
 /client/build
 /server/dist
 /server/.env
+server/.vercel
 
 # IDE and editor files
 .idea/
