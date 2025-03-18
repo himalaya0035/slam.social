@@ -15,11 +15,17 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cors());
+const allowedOrigins = process.env.NODE_ENV === "production" ? [process.env.CORS_URL_1] : "*";
+
+const corsOptions = {
+  origin: allowedOrigins,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Connect to MongoDB
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/truthbox";
 mongoose.connect(MONGODB_URI)
   .then(() => {
     console.log('Connected to MongoDB');
